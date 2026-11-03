@@ -1,0 +1,1 @@
+"""ProtFunc utilities."""

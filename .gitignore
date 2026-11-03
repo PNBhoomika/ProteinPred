@@ -1,0 +1,19 @@
+# Python environments, caches, bytecode, archives, and model weights
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.zip
+*.pt
+
+# Local datasets and trained model artifacts
+/data/
+/models/
+
+# Keep measured results and the retained DIAMOND hit file in version control.
+/results/*
+!/results/metrics.csv
+!/results/*.png
+!/results/diamond/
+/results/diamond/*
+!/results/diamond/hits.tsv
