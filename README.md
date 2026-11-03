@@ -15,34 +15,27 @@ flowchart LR
 
 ## Quickstart
 
-Python 3.10–3.13 is recommended. For tests and the no-Torch demo app, install the small dev set (it includes FastAPI/Uvicorn for the stub server):
+### Windows (PowerShell)
 
-```bash
-python -m pip install -r requirements-dev.txt
-make test
-make app
-```
-
-Open `http://127.0.0.1:8000`. With no exported artifacts under `models/`, the API runs in clearly marked **demo model** mode. Demo scores are illustrative and are not model results.
-
-### Windows commands without Make
-
-In PowerShell, these commands install the development dependencies, run tests, and start the demo app:
+Clone the repository, create and activate a Python 3.12 environment, install CPU-only PyTorch and the app/test dependencies, run the tests, then launch the app:
 
 ```powershell
-py -3.11 -m venv .venv
+git clone https://github.com/PNBhoomika/ProteinPred.git
+cd ProteinPred
+py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-dev.txt
-python -m pytest -q
-python -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-To load trained weights and embed input proteins locally, install the app dependencies. On Windows, install CPU-only Torch first, then the rest of the pinned app set:
-
-```powershell
 python -m pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r requirements-app.txt
+python -m pip install -r requirements-dev.txt
+python -m pytest
+python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 ```
+
+Open <http://127.0.0.1:8000>. The first prediction needs internet access to download ESM-2 8M from Hugging Face (about 30 MB); the model is cached afterward.
+
+### macOS / Linux
+
+Clone the same repository, create/activate a Python 3.12 venv (`python3.12 -m venv .venv`, then `source .venv/bin/activate`), and run the same dependency install, test, and Uvicorn commands above. Install the PyTorch build appropriate for your platform if the Windows CPU-wheel command is not suitable.
 
 This is inference only; bulk embedding extraction and training stay in the GPU notebooks. Kaggle's training dependencies are pinned separately in `requirements-train.txt` and are installed by the notebook setup cells.
 
@@ -91,7 +84,7 @@ The input is a synthetic back-translation, not a natural gene. Scores are model 
 
 **Known limitation:** no minimum ORF length is enforced, so a short random sequence containing an ATG can still return predictions.
 
-The `models/` directory is not in the repository; notebook 02 produces it on Kaggle (see [the training runbook](docs/TRAINING_RUNBOOK.md)).
+The trained models used for the reported results are included in `models/`, so you can run the app without retraining. To retrain from scratch, see `docs/TRAINING_RUNBOOK.md`.
 
 `fmax` is protein-centric: it macro-averages per-protein precision over proteins with predictions and recall over proteins with true labels at each threshold. `micro_fmax` is the retained pooled version. `mean_term_ap` is mean per-term average precision. Rare/frequent F-max uses term frequencies from the training split.
 

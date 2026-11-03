@@ -8,6 +8,7 @@ __pycache__/
 
 # Local datasets and trained model artifacts
 /data/
+# The current models/ files were force-added on purpose. New or larger model files over 100 MB should use a GitHub Release or Git LFS instead.
 /models/
 
 # Keep measured results and the retained DIAMOND hit file in version control.
